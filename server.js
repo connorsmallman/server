@@ -71,7 +71,7 @@ app.get('/playerinbox/emails/snippets', function (req, res) {
 		}
 	}
 
-	res.send(response);
+	res.send([{"total": 2}, response]);
 });
 
 app.get('/playerinbox/email/:id', function (req, res) {
