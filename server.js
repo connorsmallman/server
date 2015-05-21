@@ -4,6 +4,7 @@ var app = express();
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
@@ -56,7 +57,7 @@ var data = [
 		subject: "hello",
 		content: "<div>hello content</div>",
 		isRead: true,
-		date: "2 May"
+		date: "1 May"
 	}
 ]
 
@@ -74,10 +75,28 @@ app.get('/playerinbox/emails/snippets', function (req, res) {
 	res.send([{"total": 2}, response]);
 });
 
+app.delete('/playerinbox/emails/snippets/:id', function (req, res) {
+	var id = req.params.id;
+
+	var response = data;
+
+	for(var i = 0; i < data.length; i++){
+		if(id.toString() ==  data[i].id.toString()){
+			response.splice(i, 1);
+		}
+	}
+
+	res.send(response);
+});
+
+app.use('/playerinbox/emails/snippets/:id', function (req, res) {
+	console.log(req.params.id);
+});
+
 app.get('/playerinbox/email/:id', function (req, res) {
 	var id = req.params.id;
 
-	for(var i = 0; i < data.length - 1; i++){
+	for(var i = 0; i < data.length; i++){
 		if(id.toString() == data[i].id.toString()){
 			res.send(data[i]);
 		}
