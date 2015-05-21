@@ -6,10 +6,14 @@ var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With'); 
-    ('OPTIONS' == req.method) ? res.sendSatus(200) : next(); 
+    ('OPTIONS' == req.method) ? res.send(200) : next(); 
 };
 
 app.use(allowCrossDomain);
+
+app.use(function(err, req, res, next) {
+	res.end(500);
+});
 
 var data = [
 	{
@@ -95,13 +99,21 @@ app.use('/playerinbox/emails/snippets/:id', function (req, res) {
 	console.log(req.params.id);
 });
 
-app.get('/playerinbox/email/:id', function (req, res) {
+app.get('/playerinbox/email/:id', function (req, res, next) {
 	var id = req.params.id;
+	var dataObj;
 
 	for(var i = 0; i < data.length; i++){
 		if(id.toString() == data[i].id.toString()){
-			res.send(data[i]);
+			dataObj = data[i];
 		}
+	}
+
+	if(dataObj) {
+		res.send(dataObj);
+	} else {
+		// error
+		next('error');
 	}
 });
 
