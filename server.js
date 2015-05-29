@@ -19,7 +19,7 @@ var data = [
 	{
 		id: 1,
 		subject: "hello",
-		content: "<div>hello content</div>",
+		content: "<div><img src='http://placehold.it/100x100'>hello content</div>",
 		isRead: false,
 		date: "7 May"
 	},
@@ -67,7 +67,8 @@ var data = [
 	}
 ]
 
-app.get('/playerinbox/emails/snippets', function (req, res) {
+
+app.get('/OrchardLocal/api/PlayerInboxWidget/GetMessages', function (req, res, next) {
 	var page = req.query.page;
 
 	var response = [];
@@ -81,8 +82,8 @@ app.get('/playerinbox/emails/snippets', function (req, res) {
 	res.send([{"total": 2}, response]);
 });
 
-app.delete('/playerinbox/emails/snippets/:id', function (req, res) {
-	var id = req.params.id;
+app.get('/OrchardLocal/api/PlayerInboxWidget/GetMessage', function (req, res, next) {
+	var id = req.query.id;
 
 	var response = data;
 
@@ -93,28 +94,6 @@ app.delete('/playerinbox/emails/snippets/:id', function (req, res) {
 	}
 
 	res.send(response);
-});
-
-app.use('/playerinbox/emails/snippets/:id', function (req, res) {
-	console.log(req.params.id);
-});
-
-app.get('/playerinbox/email/:id', function (req, res, next) {
-	var id = req.params.id;
-	var dataObj;
-
-	for(var i = 0; i < data.length; i++){
-		if(id.toString() == data[i].id.toString()){
-			dataObj = data[i];
-		}
-	}
-
-	if(dataObj) {
-		res.send(dataObj);
-	} else {
-		// error
-		next('error');
-	}
 });
 
 var port = process.env.PORT || 3000;
