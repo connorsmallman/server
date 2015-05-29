@@ -93,7 +93,7 @@ app.get('/OrchardLocal/api/PlayerInboxWidget/GetMessage', function (req, res, ne
 		}
 	}
 
-	res.send(response);
+	res.send(response[1]);
 });
 
 var port = process.env.PORT || 3000;
